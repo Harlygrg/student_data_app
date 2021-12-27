@@ -1,31 +1,16 @@
-import 'package:hive/hive.dart';
+
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:new_studentapp/dataManipulation/student_database.dart';
-import 'package:new_studentapp/widgets/add_details.dart';
-// import 'package:new_studentapp/widgets/display_details.dart';
+import 'package:new_studentapp/controller/home_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-// import 'package:new_studentapp/dataManipulation/student_database.dart';
-// import 'dart:async';
-// import 'package:path/path.dart';
-
-import '../main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/src/extension_instance.dart';
+import 'add_details.dart';
 import 'display_details.dart';
-class Home extends StatefulWidget {
+var homeContoller = Get.put(HomeController());
+class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
-
-  @override
-  State<Home> createState() => _HomeState();
-}
-
-class _HomeState extends State<Home> {
-  late Box<DataModel> dataModelBoxNew;
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    dataModelBoxNew =Hive.box<DataModel>(studentBoxName);
-  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,25 +22,25 @@ class _HomeState extends State<Home> {
           width: MediaQuery.of(context).size.width,
           height:  MediaQuery.of(context).size.height,
           child: ValueListenableBuilder(
-          valueListenable: dataModelBoxNew.listenable(),
-            builder: (context, Box<DataModel> student,_){
-                  List<String> name=[];
-                  List<int> keys;
-                  List<int> count(){
-                    keys = student.keys.cast<int>().toList();
-                    return keys;
-                  }
+            valueListenable: homeContoller.dataModelBoxNew.listenable(),
+            builder: (context,_,value){
+              List<int> keys;
+              List<int> count(){
+                keys =  homeContoller.dataModelBoxNew.keys.cast<int>().toList();
+                return keys;
+              }
               return count().isEmpty ? Center(child:Text("Add Student Details") ,):
               ListView.builder(
-                itemCount: count().length,
+                  itemCount: count().length,
                   itemBuilder: (context,index){
-                  final int key =count()[index];
-                    final studentDetails =student.get(key);
+                    final int key =count()[index];
+                    final studentDetails = homeContoller.dataModelBoxNew.get(key);
                     return GestureDetector(onTap: (){
                       int num =index;
                       print("________________________");
                       print(num);
-                     Navigator.push(context, MaterialPageRoute(builder: (context)=>DisplayDetails(index:key)));
+                      Get.to(DisplayDetails(index:key));
+                      // Navigator.push(context, MaterialPageRoute(builder: (context)=>DisplayDetails(index:key)));
                     },
                       child: ListTile(title: Text(studentDetails!.name,
                         style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),tileColor: Colors.white30,
@@ -69,12 +54,14 @@ class _HomeState extends State<Home> {
       floatingActionButton: FloatingActionButton(
         onPressed: (){
           print("--------------hi===========");
-          Navigator.push(context,
-              MaterialPageRoute(
-                  builder: (context)=>AddDetails()));
+          // Navigator.push(context,
+          //     MaterialPageRoute(
+          //         builder: (context)=>AddDetails()));
+          Get.to(AddDetails());
 
         },
         child: Icon(Icons.add),),
     );
   }
 }
+

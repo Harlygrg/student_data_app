@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:hive/hive.dart';
 import 'dart:io' show Directory;
-
-import 'package:flutter/material.dart';
-import 'package:new_studentapp/dataManipulation/student_database.dart';
-import 'package:new_studentapp/widgets/home1.dart';
-import 'package:new_studentapp/widgets/display_details.dart';
-import 'package:new_studentapp/widgets/edit_details.dart';
-import 'package:new_studentapp/widgets/add_details.dart';
+import 'package:new_studentapp/view/home1.dart';
 import 'package:path_provider/path_provider.dart';
+import 'model/student_database.dart';
 const studentBoxName ="studentBox";
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,14 +21,14 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Fltter database learning',
       theme: ThemeData(
           primarySwatch: Colors.purple,
           backgroundColor: Colors.white60
       ),
-      home: Home(),
+      home: const Home(),
     );
   }
 }
